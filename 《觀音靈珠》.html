@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦觀音祈福靈珠✦</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            /* 宇宙虛空與神聖金光色系 */
+            --void-bg: #030308;
+            --nebula-dark: #0f1026;
+            --nebula-light: #1c1f4a;
+            --divine-gold: #eedd99; /* 微調為較柔和的法帖金 */
+            --divine-gold-glow: rgba(238, 221, 153, 0.6);
+            --starlight: #e6f2ff;
+            --glass-bg: rgba(15, 16, 38, 0.5);
+            --glass-border: rgba(255, 215, 0, 0.2);
+            --text-main: #fdfbf7;
+            --text-muted: #8e8b99;
+            --blue-accent: #64b5f6; /* 新增附圖中的冰藍色點綴 */
+        }
+
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background: radial-gradient(ellipse at bottom, var(--nebula-light) 0%, var(--nebula-dark) 40%, var(--void-bg) 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start; /* 讓長內容在小螢幕能正常滾動 */
+            justify-content: center;
+            padding: 30px 15px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* ===== 星空粒子系統 ===== */
+        #star-container {
+            position: absolute;
+            top: -10%; left: -10%; width: 120%; height: 120%; 
+            z-index: 0;
+            pointer-events: none;
+            transition: transform 0.1s ease-out; 
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #fff, 0 0 12px var(--starlight);
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff, 0 0 20px #ffd700; }
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main-layout {
+            display: flex;
+            gap: 40px;
+            max-width: 1400px;
+            width: 100%;
+            align-items: stretch;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform-origin: center center;
+            z-index: 10;
+        }
+
+        /* ===== FLOATING BUTTONS ===== */
+        .floating-fit-btn, .audio-toggle-btn {
+            position: fixed;
+            top: 25px;
+            z-index: 1000;
+            background: rgba(15, 16, 38, 0.6);
+            backdrop-filter: blur(10px);
+            color: #ffd700;
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,215,0,0.1);
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        .floating-fit-btn { right: 25px; }
+        .audio-toggle-btn { right: 180px; }
+        .floating-fit-btn:hover, .audio-toggle-btn:hover {
+            background: rgba(28, 31, 74, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255,215,0,0.6);
+            text-shadow: 0 0 8px #ffd700;
+        }
+
+        /* ===== LEFT PANEL ===== */
+        .left-panel {
+            width: 380px; min-width: 380px;
+            max-height: calc(100vh - 60px); /* 確保面板不會超出螢幕可視範圍 */
+            background: #0d0a14; /* 沉穩深色底 */
+            border-radius: 20px; 
+            padding: 35px 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; position: relative;
+            animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateX(0); filter: blur(0); }
+        }
+
+        .panel-title {
+            font-size: 1.6rem;
+            color: var(--divine-gold);
+            text-align: center;
+            letter-spacing: 6px;
+            margin-bottom: 12px;
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(238, 221, 153, 0.3);
+        }
+        
+        .panel-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .settings-body {
+            flex: 1; overflow-y: auto; padding-right: 5px;
+            scrollbar-width: thin; scrollbar-color: var(--text-muted) transparent;
+        }
+        .settings-body::-webkit-scrollbar { width: 4px; }
+        .settings-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+        .section-label { 
+            color: var(--blue-accent); 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            letter-spacing: 2px; 
+            margin-bottom: 15px; 
+        }
+
+        /* 深色下拉式選單 */
+        .input-row { display: flex; gap: 8px; margin-bottom: 25px; }
+        .custom-select {
+            width: 100%; padding: 14px 15px; 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 8px;
+            background: #08060a; 
+            color: var(--text-main); 
+            font-size: 0.95rem; font-family: inherit;
+            transition: all 0.3s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%2364b5f6" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: 50%;
+            cursor: pointer;
+        }
+        .custom-select:focus { outline: none; border-color: var(--blue-accent); box-shadow: 0 0 10px rgba(100, 181, 246, 0.2); }
+        .custom-select option { background: #0d0a14; color: var(--text-main); }
+
+        /* 注入心念能量按鈕 (手動引導) */
+        .btn-add {
+            width: 100%; padding: 15px;
+            background: linear-gradient(180deg, #2a1f1a, #1a100c);
+            color: var(--divine-gold); 
+            border: 1px solid rgba(238, 221, 153, 0.3); 
+            border-radius: 12px;
+            font-weight: 600; font-size: 1rem; cursor: pointer; font-family: inherit; letter-spacing: 3px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: all 0.3s; margin-bottom: 20px;
+        }
+        .btn-add:active { transform: translateY(2px); }
+        .btn-add:hover { filter: brightness(1.2); box-shadow: 0 0 20px var(--divine-gold-glow); }
+
+        /* 隨機自動導航按鈕 */
+        .btn-random {
+            width: 100%; padding: 15px;
+            background: transparent;
+            color: var(--blue-accent);
+            border: 1px dashed rgba(100, 181, 246, 0.4);
+            border-radius: 12px;
+            font-weight: 600; font-size: 1rem; cursor: pointer; font-family: inherit; letter-spacing: 2px;
+            transition: all 0.3s; margin-bottom: 40px;
+        }
+        .btn-random:active { transform: translateY(2px); }
+        .btn-random:hover { background: rgba(100, 181, 246, 0.1); border-color: var(--blue-accent); box-shadow: 0 0 15px rgba(100, 181, 246, 0.2); }
+
+        /* 輔助控制按鈕 */
+        .btn-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-ctrl {
+            flex: 1; padding: 10px 0; 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 8px;
+            font-weight: 600; font-size: 0.8rem; cursor: pointer; font-family: inherit; letter-spacing: 1px; 
+            transition: all 0.3s;
+            background: #14111d; color: var(--text-muted);
+        }
+        .btn-ctrl:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-ctrl:active { transform: translateY(1px); }
+
+        /* 法相典籍與介紹清單 (手風琴選單) */
+        .list-header-text {
+            font-size: 0.85rem; color: var(--text-muted);
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 10px; margin-bottom: 15px; letter-spacing: 2px;
+        }
+
+        /* 限制清單區塊高度，並加入獨立專屬卷軸 */
+        #itemList {
+            max-height: 280px; /* 大幅縮短縱向長度 */
+            overflow-y: auto;  /* 內容過長時啟動捲動機制 */
+            padding-right: 8px; /* 預留空間，避免文字與卷軸貼齊 */
+            scrollbar-width: thin; 
+            scrollbar-color: rgba(100, 181, 246, 0.4) transparent;
+        }
+        #itemList::-webkit-scrollbar { width: 4px; }
+        #itemList::-webkit-scrollbar-thumb { background: rgba(100, 181, 246, 0.4); border-radius: 4px; }
+
+        .item-entry {
+            display: flex; flex-direction: column; padding: 14px 15px; margin-bottom: 12px;
+            background: #14111d; border-radius: 10px;
+            border: 1px dashed rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+        .item-entry:hover { border-color: rgba(255,255,255,0.2); background: #1a1625; }
+        
+        /* 選單標題區 */
+        .item-header {
+            display: flex; align-items: center; gap: 12px; width: 100%; cursor: pointer;
+        }
+        .item-icon { font-size: 1.4rem; width: 30px; text-align: center; }
+        .item-details { flex: 1; display: flex; align-items: center; justify-content: space-between; }
+        .item-name-text { color: var(--text-main); font-size: 0.95rem; font-weight: 600; letter-spacing: 2px; }
+        
+        /* 展開圖示 */
+        .expand-icon {
+            color: var(--text-muted); font-size: 0.8rem; transition: transform 0.3s;
+        }
+        .item-entry.expanded .expand-icon { transform: rotate(180deg); color: var(--divine-gold); }
+
+        /* 介紹內文 (預設隱藏，點擊展開) */
+        .item-desc {
+            display: none;
+            font-size: 0.85rem;
+            color: #b0b4c9;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            line-height: 1.6;
+            letter-spacing: 1px;
+            animation: fadeInDesc 0.3s ease-in-out;
+        }
+        .item-entry.expanded .item-desc { display: block; }
+        .item-entry.expanded { border-color: rgba(238, 221, 153, 0.4); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        
+        @keyframes fadeInDesc {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RIGHT PANEL (Cosmic Shrine) ===== */
+        .right-panel { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+
+        .shrine-halo {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(28, 31, 74, 0.8) 0%, transparent 70%);
+            border-radius: 50%; z-index: 0; pointer-events: none;
+            animation: pulseHalo 8s infinite alternate ease-in-out;
+        }
+        @keyframes pulseHalo { 0% { transform: scale(0.9); opacity: 0.5; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        .game-cabinet {
+            width: 100%; max-width: 550px;
+            background: rgba(10, 12, 25, 0.6);
+            backdrop-filter: blur(25px);
+            border-radius: 40px; padding: 35px 25px; position: relative;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9), inset 0 0 40px rgba(255, 215, 0, 0.05);
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 1;
+            transition: all 0.5s ease;
+        }
+        .game-cabinet.charging {
+            box-shadow: 0 0 80px rgba(255,215,0,0.6), inset 0 0 60px rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 215, 0, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .game-title-area { text-align: center; margin-bottom: 30px; width: 100%; }
+        .game-title-area h1 { 
+            font-size: 2.2rem; font-weight: 900; 
+            color: transparent; 
+            background: linear-gradient(180deg, #fff, #ffd700);
+            -webkit-background-clip: text; 
+            letter-spacing: 6px; 
+            text-shadow: 0 0 20px rgba(255,215,0,0.6);
+            animation: textGlow 3s infinite alternate;
+        }
+        @keyframes textGlow { from { text-shadow: 0 0 10px rgba(255,215,0,0.4); } to { text-shadow: 0 0 30px rgba(255,215,0,0.8); } }
+        
+        .game-title-area .title-sub { 
+            font-size: 0.95rem; color: var(--starlight); margin-top: 8px; 
+            font-weight: 600; letter-spacing: 5px; opacity: 0.8;
+        }
+
+        .gashapon-machine { width: 100%; max-width: 420px; position: relative; display: flex; flex-direction: column; align-items: center; }
+
+        .gashapon-dome {
+            width: 90%; aspect-ratio: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, rgba(28, 31, 74, 0.4) 60%, rgba(0,0,0,0.8) 100%);
+            border-radius: 50%;
+            border: 2px solid rgba(255,215,0,0.3);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 50px rgba(255, 215, 0, 0.2);
+            position: relative; overflow: hidden; z-index: 5;
+            backdrop-filter: blur(4px);
+        }
+        .gashapon-dome::after {
+            content:''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; box-shadow: inset 0 20px 50px rgba(255,255,255,0.2); pointer-events: none;
+        }
+        
+        .dome-reflection {
+            position: absolute; top: 10%; right: 15%; width: 30%; height: 15%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6), transparent); 
+            border-radius: 50%; transform: rotate(-30deg);
+            filter: blur(4px); z-index: 10; pointer-events: none;
+        }
+
+        .capsule-container { width: 100%; height: 100%; position: relative; }
+        
+        .capsule {
+            position: absolute; width: 48px; height: 48px; border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 30%, var(--c2) 80%, #000 100%);
+            box-shadow: 0 0 15px var(--c1), inset -5px -5px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
+            animation: floatInside 4s infinite alternate ease-in-out;
+        }
+        @keyframes floatInside {
+            0% { transform: translateY(0) scale(1); box-shadow: 0 0 10px var(--c1); }
+            100% { transform: translateY(-5px) scale(1.05); box-shadow: 0 0 25px var(--c1); }
+        }
+
+        .machine-body {
+            width: 100%; height: 140px;
+            background: linear-gradient(180deg, #1c1f4a, #0a0c1a);
+            margin-top: -40px; padding-top: 50px;
+            border-radius: 15px 15px 40px 40px;
+            border: 1px solid rgba(255,215,0,0.2); border-top: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            padding-bottom: 20px; z-index: 4;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 5px 20px rgba(255,215,0,0.1);
+            position: relative;
+        }
+
+        .control-panel { display: flex; align-items: center; justify-content: center; gap: 40px; width: 100%; padding: 0 20px; }
+
+        .handle-base {
+            width: 70px; height: 70px;
+            background: radial-gradient(circle at 50% 50%, #2a2d64, #0a0c1a);
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255,215,0,0.3), inset 0 0 15px rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .handle-base.standby { animation: breatheHalo 3s infinite ease-in-out; }
+        @keyframes breatheHalo {
+            0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.2), inset 0 0 15px rgba(0,0,0,0.8); border-color: rgba(255,215,0,0.5); }
+            50% { box-shadow: 0 0 35px rgba(255,215,0,0.6), inset 0 0 15px rgba(0,0,0,0.8); border-color: #ffd700; }
+        }
+        .handle-hint {
+            position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%);
+            white-space: nowrap; color: #ffd700; font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 2px; text-shadow: 0 0 8px rgba(255,215,0,0.6);
+            animation: blinkHint 1.5s infinite; pointer-events: none; transition: opacity 0.3s;
+        }
+        .handle-base:not(.standby) .handle-hint { opacity: 0; }
+
+        .handle-base::before {
+            content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.8), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .handle-base:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,215,0,0.6); }
+        .handle-base:hover::before { opacity: 1; animation: rotateConic 2s linear infinite; }
+        .handle-base:active { transform: scale(0.9); box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        @keyframes rotateConic { 100% { transform: rotate(360deg); } }
+        
+        .handle-knob {
+            width: 12px; height: 45px; background: linear-gradient(180deg, #fff, #ffd700);
+            border-radius: 6px; position: absolute; z-index: 2;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        .prize-exit {
+            width: 100px; height: 45px; background: #000;
+            border-radius: 10px 10px 30px 30px;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.9), 0 2px 5px rgba(255,215,0,0.2);
+            position: absolute; bottom: 15px; display: flex; align-items: center; justify-content: center;
+            overflow: visible; border: 1px solid rgba(255,215,0,0.1);
+        }
+
+        .machine-info {
+            margin-top: 25px; color: var(--starlight);
+            font-family: inherit; font-weight: 600; font-size: 0.95rem;
+            display: flex; gap: 20px; letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+        }
+
+        /* ===== 靈珠降臨層 ===== */
+        .dispensed-area {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 50; background: rgba(3, 3, 8, 0.7); backdrop-filter: blur(10px);
+            border-radius: 40px; display: none; flex-direction: column; align-items: center; justify-content: center;
+            animation: fadeInVoid 0.5s ease-out;
+        }
+        @keyframes fadeInVoid { from { opacity: 0; background: transparent; } to { opacity: 1; } }
+
+        .big-capsule {
+            width: 180px; height: 180px; position: relative; cursor: pointer; border-radius: 50%;
+            box-shadow: 0 0 60px var(--c1), inset -10px -10px 40px rgba(0,0,0,0.5);
+            animation: floatOrb 3s ease-in-out infinite, dropOrb 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s;
+        }
+        
+        .big-capsule::before {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
+            transform: translate(-50%, -50%); border-radius: 50%; border: 3px solid var(--c1);
+            pointer-events: none; z-index: -1; animation: rippleEffect 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+        @keyframes rippleEffect {
+            0% { width: 100%; height: 100%; opacity: 0.8; border-width: 4px; box-shadow: 0 0 10px var(--c1); }
+            100% { width: 220%; height: 220%; opacity: 0; border-width: 0px; box-shadow: 0 0 30px var(--c1); }
+        }
+
+        .big-capsule::after {
+            content:''; position: absolute; top:-20%; left:-20%; width:140%; height:140%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
+            border-radius: 50%; pointer-events: none; animation: pulseHalo 2s infinite alternate;
+        }
+        .big-capsule:hover { transform: scale(1.1); filter: brightness(1.2); box-shadow: 0 0 100px var(--c1); }
+        .big-capsule:active { transform: scale(0.9); }
+
+        @keyframes dropOrb {
+            0% { transform: scale(0) translateY(-100px); opacity: 0; filter: brightness(3); }
+            60% { transform: scale(1.1) translateY(10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); filter: brightness(1); }
+        }
+        @keyframes floatOrb { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .capsule-top {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--c1) 40%, var(--c2) 80%, #000 100%);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .capsule-label {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 5; font-size: 3.5rem; color: #fff; user-select: none; pointer-events: none; 
+            text-shadow: 0 0 20px var(--c2); animation: pulseText 2s infinite alternate;
+        }
+        .hint-text {
+            position: absolute; bottom: -60px; left: 0; width: 100%; text-align: center; 
+            color: #ffd700; font-weight: 600; font-size: 1.1rem; letter-spacing: 4px; 
+            text-shadow: 0 0 10px rgba(255,215,0,0.6); animation: blinkHint 1.5s infinite;
+        }
+        @keyframes blinkHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 20px #ffd700; } }
+
+        .rotating-handle { animation: rotateHandle 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes rotateHandle { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+        .shaking .capsule { animation: energySwirl 0.8s cubic-bezier(0.2, 0, 0.8, 1) infinite; }
+        @keyframes energySwirl {
+            0% { transform: rotate(0deg) translateX(8px) rotate(0deg) scale(1); filter: brightness(1); }
+            50% { filter: brightness(1.5); transform: rotate(180deg) translateX(12px) rotate(-180deg) scale(1.1); }
+            100% { transform: rotate(360deg) translateX(8px) rotate(-360deg) scale(1); filter: brightness(1); }
+        }
+
+        .dropped-capsule {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
+            box-shadow: 0 0 20px var(--c1); animation: dropOutFlash 0.6s ease-out forwards;
+            position: absolute; bottom: 5px; z-index: 20;
+        }
+        @keyframes dropOutFlash {
+            0% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+            50% { transform: translateY(0) scale(1.2); opacity: 1; filter: brightness(2); }
+            70% { transform: translateY(-10px) scale(1); filter: brightness(1.5); }
+            100% { transform: translateY(0) scale(1); filter: brightness(1); }
+        }
+
+        #flash-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 2000; pointer-events: none; opacity: 0;
+            transition: opacity 0.4s ease-out; display: none;
+        }
+        #flash-overlay.active { display: block; animation: flashBang 1s ease-out forwards; }
+        @keyframes flashBang { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* ===== Prize Popup ===== */
+        .prize-popup {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.9); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.6s; backdrop-filter: blur(20px);
+        }
+        .prize-popup.show { opacity: 1; pointer-events: all; }
+        .prize-popup-box {
+            background: radial-gradient(circle at top, #1c1f4a, #030308);
+            border: 1px solid rgba(255,215,0,0.5); border-radius: 20px; padding: 40px 60px;
+            text-align: center; box-shadow: 0 0 80px rgba(255, 215, 0, 0.2), inset 0 0 30px rgba(255,255,255,0.05);
+            transform: scale(0.8) translateY(50px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 450px; position: relative; overflow: hidden;
+        }
+        .prize-popup-box::before { 
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.1), transparent);
+            animation: rotateConic 10s linear infinite; z-index: 0; pointer-events: none;
+        }
+        .prize-popup.show .prize-popup-box { transform: scale(1) translateY(0); }
+        
+        .popup-content { position: relative; z-index: 1; }
+        .popup-label { font-size: 1.1rem; color: #ffd700; font-weight: 600; margin-bottom: 25px; letter-spacing: 6px; text-shadow: 0 0 10px rgba(255,215,0,0.6); }
+        
+        .popup-prize-image-container, .popup-prize-icon, .popup-prize-name, .popup-label, .popup-close-btn {
+            position: relative; z-index: 2;
+        }
+
+
+        @keyframes spinMandala {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.9); filter: blur(1px); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); filter: blur(2px) brightness(1.2); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(0.9); filter: blur(1px); }
+        }
+
+        .prize-popup.show .mandala-aura { opacity: 0.85; transition: opacity 2s ease-in 0.6s; }
+
+        .popup-prize-image-container {
+            position: relative;
+            margin: 0 auto 25px auto;
+            width: 230px;
+            height: 420px;
+            border: 3px solid var(--divine-gold);
+            border-radius: 12px;
+            padding: 4px;
+            background: rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2);
+            display: none; /* 預設隱藏，由 JS 控制顯示 */
+            overflow: hidden;
+        }
+
+        .popup-prize-image {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 6px;
+            animation: fadeInUpImg 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInUpImg { 0% { opacity: 0; transform: translateY(30px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .popup-prize-icon { 
+            font-size: 6rem; line-height: 1; margin-bottom: 25px; display: inline-block; 
+            animation: floatIconVoid 4s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5)); 
+        }
+        @keyframes floatIconVoid { 0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 20px rgba(255,255,255,0.5)); } 50% { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 0 40px #fff); } }
+        
+        .popup-prize-name { 
+            font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 30px; letter-spacing: 8px; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 30px #ffd700;
+        }
+        .popup-close-btn {
+            padding: 15px 50px; background: transparent; color: #ffd700; border: 1px solid #ffd700; border-radius: 40px; 
+            font-size: 1.1rem; font-weight: 600; cursor: pointer; font-family: inherit; 
+            box-shadow: 0 0 15px rgba(255,215,0,0.2), inset 0 0 10px rgba(255,215,0,0.1);
+            transition: all 0.3s; letter-spacing: 5px;
+        }
+        .popup-close-btn:hover { background: #ffd700; color: #000; box-shadow: 0 0 30px rgba(255,215,0,0.6); transform: scale(1.05); }
+        
+        .confetti { position: fixed; z-index: 1001; pointer-events: none; }
+
+        /* ===== 分享區樣式 ===== */
+        .share-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,215,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+        .share-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        .qrcode-container {
+            background: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        .qrcode-container canvas, .qrcode-container img {
+            display: block;
+            width: 150px;
+            height: 150px;
+        }
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .share-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .share-btn.line { border-color: #06C755; color: #06C755; }
+        .share-btn.line:hover { background: #06C755; color: #fff; }
+        .share-btn.fb { border-color: #1877F2; color: #1877F2; }
+        .share-btn.fb:hover { background: #1877F2; color: #fff; }
+        .share-btn.x { border-color: #fff; }
+        .share-btn.x:hover { background: #fff; color: #000; }
+        .share-btn.copy { border-color: #ffd700; color: #ffd700; }
+        .share-btn.copy:hover { background: #ffd700; color: #000; }
+
+        @media (max-width: 1100px) {
+            .main-layout { flex-direction: column; align-items: center; }
+            .left-panel { width: 100%; min-width: unset; max-width: 550px; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .game-cabinet { padding: 25px 15px; width: 100%; border-radius: 30px; }
+            .prize-popup-box { padding: 30px 20px; }
+            .left-panel { max-width: 100%; padding: 25px 20px; border-radius: 16px; }
+            .floating-fit-btn, .audio-toggle-btn {
+                padding: 8px 12px; font-size: 0.85rem; top: 12px; letter-spacing: 1px;
+                min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+            }
+            .floating-fit-btn { right: 8px; }
+            .audio-toggle-btn { right: 105px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="star-container"></div>
+<div id="flash-overlay"></div>
+
+<button id="floatingFitBtn" class="floating-fit-btn">⛶ 最佳視角</button>
+<button id="audioToggleBtn" class="audio-toggle-btn">🔊 音效開啟</button>
+
+<div class="main-layout">
+    <!-- LEFT PANEL (重塑為宇宙共振樞紐風格) -->
+    <div class="left-panel" id="leftPanel">
+        <h2 class="panel-title">《心頻共振樞紐》</h2>
+        <p class="panel-subtitle">連結觀音</p>
+        
+        <div class="settings-body">
+            <div class="section-label">✦ 指定抽觀音卡</div>
+            <div class="input-row">
+                <!-- 取代原本的輸入框，改為下拉式選單 -->
+                <select id="manualSelect" class="custom-select">
+                    <option value="">-- 定位法相法號 --</option>
+                    <!-- JavaScript 將動態載入法號選項 -->
+                </select>
+            </div>
+            
+            <button class="btn-add" id="btnManual">注 入 心 念 能 量</button>
+
+            <!-- 隨機宇宙共振 (抽觀音卡牌) -->
+            <button class="btn-random" id="btnRandom">🌌 隨機抽觀音卡</button>
+
+            <!-- 輔助控制按鈕 -->
+            <div class="btn-row">
+                <button class="btn-ctrl btn-fit" id="toggleFit">⛶ 滿版視野</button>
+            </div>
+
+            <div class="item-list-container">
+                <div class="list-header-text">法相典籍與介紹</div>
+                <!-- 展開式介紹清單 -->
+                <div id="itemList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL (Cosmic Shrine) -->
+    <div class="right-panel">
+        <div class="shrine-halo"></div>
+        <div class="game-cabinet" id="gameCabinet">
+            <div class="game-title-area">
+                <h1>《觀音祈福靈珠》</h1>
+                <div class="title-sub">✦ 誠心感召</div>
+            </div>
+
+            <div class="gashapon-machine">
+                <div class="gashapon-dome">
+                    <div class="dome-reflection"></div>
+                    <div class="capsule-container" id="capsuleContainer"></div>
+                </div>
+
+                <div class="machine-body">
+                    <div class="control-panel">
+                        <div class="coin-slot"></div>
+                        <div class="handle-base standby" id="handle">
+                            <div class="handle-knob"></div>
+                            <div class="handle-knob horizontal"></div>
+                            <div class="handle-hint">👇 點擊觸動星樞</div>
+                        </div>
+                        <div class="coin-slot" style="opacity:0"></div>
+                    </div>
+                    <div class="prize-exit" id="prizeExit"></div>
+                </div>
+
+                <div class="machine-info">
+                    <span id="drawCount">已祈福: 0 次</span>
+                    <span id="machineStatus">等待啟動...</span>
+                </div>
+
+                <div class="dispensed-area" id="dispensedArea">
+                    <div class="big-capsule" id="bigCapsule">
+                        <div class="capsule-top" id="capsuleTop"></div>
+                        <div class="capsule-label">🪷</div>
+                        <div class="hint-text">✦觀音法相結緣✦</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="prize-popup" id="prizePopup">
+    <div class="prize-popup-box">
+        <div class="popup-content">
+            <div class="popup-label">✦ 心頻共振 ✦ 誠心感召 ✦</div>
+            
+            <div class="mandala-aura"></div>
+
+            <div class="popup-prize-image-container" id="popupImgContainer">
+                <img id="popupImage" class="popup-prize-image" src="" alt="觀音法相" />
+            </div>
+            <div class="popup-prize-icon" id="popupIcon">🪷</div>
+            
+            <div class="popup-prize-name" id="popupPrize"></div>
+            <!-- 分享區塊 -->
+            <div class="share-section">
+                <div class="share-label">✦ 分享祝福 ✦</div>
+                <div class="qrcode-container">
+                    <img id="qrcodeImg" src="" alt="分享 QR Code" />
+                </div>
+                <div class="share-buttons">
+                    <button class="share-btn line" id="shareLineBtn">
+                        <span>LINE</span>
+                    </button>
+                    <button class="share-btn fb" id="shareFbBtn">
+                        <span>Facebook</span>
+                    </button>
+                    <button class="share-btn x" id="shareXBtn">
+                        <span>𝕏</span>
+                    </button>
+                    <button class="share-btn copy" id="shareCopyBtn">
+                        <span>📋 複製連結</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="popup-close-btn" id="popupClose">雙 手 合 十</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// 機率與資料完全封裝寫死於底層，不再對外暴露
+let isSpinning = false;
+let drawCounter = 0;
+let currentPrize = null;
+let isAudioEnabled = localStorage.getItem('kwanYinAudio') !== 'false'; 
+
+// 預設 13 尊觀音與專屬介紹內文
+const defaultIntros = {
+    "魚籃觀音": "除障保平安，護佑水上與出入安全，化解水厄。",
+    "白衣觀音": "尋聲救苦，隨緣化導，象徵純潔無私的慈悲願力。",
+    "楊柳觀音": "手持楊柳灑甘露，消除眾生無明煩惱與身心病痛。",
+    "灑水觀音": "普灑甘露潤澤萬物，洗滌心靈塵垢，消災解厄。",
+    "持經觀音": "手持經卷，象徵智慧傳承，開啟眾生般若明燈。",
+    "施藥觀音": "施予良藥，拔除世間身心疾苦，護佑健康延年。",
+    "延命觀音": "救拔毒藥水火之難，消除宿世災厄，護佑延年益壽。",
+    "普慈觀音": "普悲同體，慈眼視眾生，帶來無差別的全面護佑。",
+    "不二觀音": "象徵佛法不二法門，破除二元對立與世間執著。",
+    "水月觀音": "觀看水中月，了悟世事如幻，指引眾生看破執念。",
+    "南海古佛": "坐鎮南海，悲心深切，聞聲救苦，廣度有緣眾生。",
+    "觀音大士": "大慈大悲，法力無邊，尋聲救苦之大菩薩化身。",
+    "觀音菩薩": "千處祈求千處應，苦海常作度人舟，廣大靈感。"
+};
+
+// 在此硬編碼 (Hardcode) 每尊觀音對應的機率與圖示資訊
+const items = [
+    { name: "魚籃觀音", prob: 8 }, { name: "白衣觀音", prob: 8 },
+    { name: "楊柳觀音", prob: 8 }, { name: "灑水觀音", prob: 8 },
+    { name: "持經觀音", prob: 8 }, { name: "施藥觀音", prob: 8 },
+    { name: "延命觀音", prob: 8 }, { name: "普慈觀音", prob: 8 },
+    { name: "不二觀音", prob: 8 }, { name: "水月觀音", prob: 8 },
+    { name: "南海古佛", prob: 7 }, { name: "觀音大士", prob: 7 },
+    { name: "觀音菩薩", prob: 7 }
+].map(d => ({ 
+    name: d.name, 
+    prob: d.prob, 
+    icon: getItemIcon(d.name),
+    img: getItemImage(d.name),
+    desc: defaultIntros[d.name]
+}));
+
+function generateStars() {
+    const container = document.getElementById('star-container');
+    container.innerHTML = '';
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(star);
+    }
+}
+
+function initParallax() {
+    const starContainer = document.getElementById('star-container');
+    document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 40;
+        const y = (window.innerHeight / 2 - e.pageY) / 40;
+        starContainer.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (e) => {
+            if (e.gamma !== null && e.beta !== null) {
+                const x = e.gamma * -1; 
+                const y = (e.beta - 45) * -1; 
+                const clampedX = Math.max(-30, Math.min(30, x));
+                const clampedY = Math.max(-30, Math.min(30, y));
+                starContainer.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
+            }
+        });
+    }
+}
+
+let audioCtx = null;
+function getAudioCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+
+function playChargeSound() {
+    if (!isAudioEnabled) return; 
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine'; 
+        osc.frequency.setValueAtTime(50, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 1.2);
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 1.2);
+    } catch(e) {}
+}
+
+function playDropSound() {
+    if (!isAudioEnabled) return; 
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(2000, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+}
+
+function playOpenSound() {
+    if (!isAudioEnabled) return; 
+    try {
+        const ctx = getAudioCtx();
+        [400, 600, 800].forEach((freq, i) => {
+            const osc = ctx.createOscillator(); const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(freq + 200, ctx.currentTime + 1);
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 1.5);
+        });
+    } catch(e) {}
+}
+
+function getItemIcon(name) {
+    const map = {
+        "魚籃": "🐟", "白衣": "🤍", "楊柳": "🌿", "灑水": "💧",
+        "持經": "📜", "施藥": "🏺", "延命": "🕊️", "普慈": "🪷",
+        "不二": "☯️", "水月": "🌙", "南海": "🌊", "大士": "✨", "菩薩": "🙏"
+    };
+    for(let key in map) if(name.includes(key)) return map[key];
+    return "🪷";
+}
+
+function getItemImage(name) {
+    const map = {
+        "魚籃": "《魚籃觀音》.png", "白衣": "《白衣觀音》.png",
+        "楊柳": "《楊柳觀音》.png", "灑水": "《灑水觀音》.png",
+        "持經": "《持經觀音》.png", "施藥": "《施藥觀音》.png",
+        "延命": "《延命觀音》.png", "普慈": "《普慈觀音》.png",
+        "不二": "《不二觀音》.png", "水月": "《水月觀音》.png",
+        "南海": "《南海古佛》.png", "大士": "《觀音大士》.png",
+        "菩薩": "《觀音菩薩》.png"
+    };
+    for(let key in map) if(name.includes(key)) return map[key];
+    return null; 
+}
+
+const divineColors = [
+    ['#ffffff', '#00f0ff'], 
+    ['#ffffff', '#ff00ff'], 
+    ['#ffffff', '#ffd700'], 
+    ['#ffffff', '#00ffaa']  
+];
+
+function initMachine() {
+    const container = document.getElementById('capsuleContainer');
+    container.innerHTML = '';
+    
+    for(let i=0; i<20; i++) { 
+        const cap = document.createElement('div');
+        cap.className = 'capsule';
+        const color = divineColors[Math.floor(Math.random() * divineColors.length)];
+        cap.style.setProperty('--c1', color[0]);
+        cap.style.setProperty('--c2', color[1]);
+        
+        const r = 110 * Math.sqrt(Math.random()); 
+        const theta = Math.random() * 2 * Math.PI;
+        const x = 50 + r * Math.cos(theta) / 2.5; 
+        const y = 50 + r * Math.sin(theta) / 2.5; 
+        
+        cap.style.left = `calc(${x}% - 24px)`;
+        cap.style.top = `calc(${y}% - 24px)`;
+        cap.style.setProperty('--r', Math.random()*360 + 'deg');
+        cap.style.zIndex = Math.floor(y);
+        
+        container.appendChild(cap);
+    }
+}
+
+// 接收一個選填參數 forcedPrize，若有值則直接指定結果
+function spinGashapon(forcedPrize = null) {
+    if(isSpinning || items.length === 0) return;
+    
+    if (navigator.vibrate) navigator.vibrate(50);
+
+    isSpinning = true;
+    const handle = document.getElementById('handle');
+    const container = document.getElementById('capsuleContainer');
+    const cabinet = document.getElementById('gameCabinet');
+    const status = document.getElementById('machineStatus');
+    
+    status.textContent = "匯聚星能...";
+    handle.classList.remove('standby'); 
+    handle.classList.add('rotating-handle');
+    container.classList.add('shaking');
+    cabinet.classList.add('charging'); 
+    
+    playChargeSound();
+
+    setTimeout(() => {
+        handle.classList.remove('rotating-handle');
+        container.classList.remove('shaking');
+        cabinet.classList.remove('charging');
+        
+        // 若指定法相則使用指定的，否則執行隨機抽籤
+        const prize = forcedPrize || pickWinner();
+        dropPrize(prize);
+    }, 1200);
+}
+
+function pickWinner() {
+    let rand = Math.random() * 100;
+    let sum = 0;
+    const totalP = items.reduce((a,b) => a + b.prob, 0);
+    for(let item of items) {
+        sum += item.prob;
+        if(rand <= (sum / totalP * 100)) return item;
+    }
+    return items[items.length-1];
+}
+
+function dropPrize(prize) {
+    const exit = document.getElementById('prizeExit');
+    const ball = document.createElement('div');
+    ball.className = 'dropped-capsule';
+    
+    const color = divineColors[Math.floor(Math.random() * divineColors.length)];
+    ball.style.setProperty('--c1', color[0]);
+    ball.style.setProperty('--c2', color[1]);
+    
+    exit.appendChild(ball);
+    setTimeout(() => playDropSound(), 200); 
+    
+    drawCounter++;
+    document.getElementById('drawCount').textContent = `已祈福: ${drawCounter} 次`;
+    document.getElementById('machineStatus').textContent = "靈珠降臨！";
+
+    setTimeout(() => {
+        ball.remove();
+        showDispensedCapsule(prize, color);
+    }, 800);
+}
+
+function showDispensedCapsule(prize, color) {
+    currentPrize = prize;
+    const area = document.getElementById('dispensedArea');
+    const top = document.getElementById('capsuleTop');
+    
+    top.style.setProperty('--c1', color[1]);
+    top.style.setProperty('--c2', color[0]);
+    document.getElementById('bigCapsule').style.setProperty('--c1', color[1]);
+    
+    area.style.display = 'flex';
+    document.getElementById('machineStatus').textContent = "請點擊釋放...";
+}
+
+function openBigCapsule() {
+    const area = document.getElementById('dispensedArea');
+    const flash = document.getElementById('flash-overlay');
+    
+    playOpenSound();
+    
+    document.getElementById('bigCapsule').style.transform = 'scale(2) translateY(-20px)';
+    document.getElementById('bigCapsule').style.filter = 'brightness(5) blur(10px)';
+    document.getElementById('bigCapsule').style.opacity = '0';
+    flash.classList.add('active');
+    
+    setTimeout(() => {
+        area.style.display = 'none';
+        document.getElementById('bigCapsule').style.transform = '';
+        document.getElementById('bigCapsule').style.filter = '';
+        document.getElementById('bigCapsule').style.opacity = '1';
+        showPopup(currentPrize);
+        
+        setTimeout(()=> flash.classList.remove('active'), 1000); 
+    }, 300);
+}
+
+function showPopup(prize) {
+    const popup = document.getElementById('prizePopup');
+    const popupImgContainer = document.getElementById('popupImgContainer');
+    const popupImage = document.getElementById('popupImage');
+    const popupIcon = document.getElementById('popupIcon');
+    
+    document.getElementById('popupPrize').textContent = prize.name;
+    
+    if (prize.img) {
+        popupImage.onerror = function() {
+            popupImgContainer.style.display = 'none'; 
+            popupIcon.style.display = 'inline-block'; 
+            console.warn("【系統提示】無法載入法相圖檔。請確認圖檔與網頁是否在同一資料夾，且副檔名正確");
+        };
+
+        popupImage.src = prize.img;
+        popupImgContainer.style.display = 'block'; 
+        popupIcon.style.display = 'none'; 
+        
+        popupImage.style.animation = 'none';
+        popupImage.offsetHeight; 
+        popupImage.style.animation = null;
+    } else {
+        popupIcon.textContent = prize.icon;
+        popupImgContainer.style.display = 'none'; 
+        popupIcon.style.display = 'inline-block'; 
+    }
+
+    popup.classList.add('show');
+    createStarDust();
+    generateShareQRCode();
+
+    isSpinning = false;
+    document.getElementById('machineStatus').textContent = "等待啟動...";
+}
+
+// ===== 分享功能 =====
+function getShareUrl() {
+    const baseUrl = window.location.href.split('?')[0];
+    const prizeName = currentPrize ? currentPrize.name : '';
+    return `${baseUrl}?blessing=${encodeURIComponent(prizeName)}`;
+}
+
+function getShareText() {
+    const prizeName = currentPrize ? currentPrize.name : '觀音法相';
+    return `🙏 我在《觀音祈福靈珠》獲得了【${prizeName}】的祝福！願此福緣與您分享 ✨`;
+}
+
+function generateShareQRCode() {
+    const qrImg = document.getElementById('qrcodeImg');
+    const shareUrl = getShareUrl();
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shareUrl)}`;
+}
+
+function shareToLine() {
+    const text = getShareText();
+    const url = getShareUrl();
+    window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function shareToFacebook() {
+    const url = getShareUrl();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(getShareText())}`, '_blank');
+}
+
+function shareToX() {
+    const text = getShareText();
+    const url = getShareUrl();
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+}
+
+function copyShareLink() {
+    const url = getShareUrl();
+    const text = getShareText() + '\n' + url;
+
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('shareCopyBtn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span>✓ 已複製</span>';
+        btn.style.background = '#ffd700';
+        btn.style.color = '#000';
+
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.background = '';
+            btn.style.color = '';
+        }, 2000);
+    });
+}
+
+function createStarDust() {
+    const colors = ['#ffffff', '#ffd700', '#00f0ff', '#ffaa00'];
+    for (let i = 0; i < 60; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = Math.random() * 100 + 'vw'; 
+        c.style.top = '-20px';
+        
+        const size = (4 + Math.random() * 8); 
+        c.style.width = size + 'px'; 
+        c.style.height = size + 'px';
+        c.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
+        c.style.filter = `drop-shadow(0 0 ${size}px ${c.style.backgroundColor})`;
+        
+        document.body.appendChild(c);
+        
+        const dur = (3 + Math.random() * 4) * 1000;
+        const del = Math.random() * 800;
+        
+        c.animate([
+            { transform: 'translateY(0) translateX(0) scale(1) rotate(0deg)', opacity: 1 },
+            { transform: `translateY(${window.innerHeight + 50}px) translateX(${(Math.random()-0.5)*300}px) scale(0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], { duration: dur, delay: del, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' });
+        
+        setTimeout(() => c.remove(), dur + del + 100);
+    }
+}
+
+// 渲染「手動引導」下拉選單
+function renderSelectOptions() {
+    const selectEl = document.getElementById('manualSelect');
+    items.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.name;
+        opt.textContent = item.name;
+        selectEl.appendChild(opt);
+    });
+}
+
+// 渲染「法相典籍與介紹」純文字手風琴選單
+function renderItemAccordion() {
+    const itemListEl = document.getElementById('itemList');
+    itemListEl.innerHTML = '';
+    
+    items.forEach((item) => {
+        const entry = document.createElement('div');
+        entry.className = 'item-entry';
+        
+        // 點擊展開的手風琴結構，移除機率與刪除按鈕
+        entry.innerHTML = `
+            <div class="item-header">
+                <div class="item-icon">${item.icon}</div>
+                <div class="item-details">
+                    <div class="item-name-text">${item.name}</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+            </div>
+            <div class="item-desc">${item.desc}</div>
+        `;
+        
+        // 綁定點擊展開事件
+        const header = entry.querySelector('.item-header');
+        header.addEventListener('click', () => {
+            entry.classList.toggle('expanded');
+        });
+
+        itemListEl.appendChild(entry);
+    });
+}
+
+window.onload = function() {
+    generateStars();
+    initParallax();
+
+    // 檢查是否從分享連結進入
+    const urlParams = new URLSearchParams(window.location.search);
+    const blessingParam = urlParams.get('blessing');
+    if (blessingParam) {
+        const sharedPrize = items.find(i => i.name === blessingParam);
+        if (sharedPrize) {
+            setTimeout(() => {
+                currentPrize = sharedPrize;
+                showPopup(sharedPrize);
+            }, 1000);
+        }
+    } 
+    
+    // 初始化選單與資料顯示
+    renderSelectOptions();
+    renderItemAccordion();
+    initMachine();
+
+    // 綁定「注入心念能量」(手動引導特定法相)
+    document.getElementById('btnManual').addEventListener('click', () => {
+        const val = document.getElementById('manualSelect').value;
+        if (!val) {
+            alert('請先定位祈福法相。');
+            return;
+        }
+        const prize = items.find(i => i.name === val);
+        spinGashapon(prize); // 傳入指定的 prize
+    });
+
+    // 綁定「隨機宇宙共振」與機台手把 (隨機抽籤)
+    document.getElementById('btnRandom').addEventListener('click', () => spinGashapon(null));
+    document.getElementById('handle').addEventListener('click', () => spinGashapon(null));
+
+    // 音效控制
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    function updateAudioBtnUI() {
+        audioToggleBtn.textContent = isAudioEnabled ? '🔊 音效開啟' : '🔇 音效關閉';
+        audioToggleBtn.style.opacity = isAudioEnabled ? '1' : '0.6';
+    }
+    updateAudioBtnUI();
+
+    audioToggleBtn.addEventListener('click', () => {
+        isAudioEnabled = !isAudioEnabled;
+        localStorage.setItem('kwanYinAudio', isAudioEnabled); 
+        updateAudioBtnUI();
+    });
+
+    // 視角控制
+    const toggleFitBtn = document.getElementById('toggleFit');
+    const floatingFitBtn = document.getElementById('floatingFitBtn');
+    const mainLayout = document.querySelector('.main-layout');
+    let isFitMode = false;
+    
+    function updateScale() {
+        if (!isFitMode) { mainLayout.style.transform = ''; return; }
+        const padding = 40;
+        const scale = Math.min(
+            (window.innerWidth - padding) / mainLayout.offsetWidth,
+            (window.innerHeight - padding) / mainLayout.offsetHeight,
+            1
+        );
+        mainLayout.style.transform = `scale(${scale})`;
+    }
+
+    function toggleFitMode() {
+        isFitMode = !isFitMode;
+        if (isFitMode) {
+            toggleFitBtn.style.color = 'var(--blue-accent)'; toggleFitBtn.style.background = 'rgba(100, 181, 246, 0.1)'; 
+            toggleFitBtn.textContent = '⛶ 原始視野'; 
+            floatingFitBtn.style.color = '#ffd700'; floatingFitBtn.style.background = 'rgba(255,215,0,0.2)'; 
+            floatingFitBtn.textContent = '⛶ 原始視野'; 
+            updateScale();
+        } else {
+            toggleFitBtn.style.color = ''; toggleFitBtn.style.background = ''; 
+            toggleFitBtn.textContent = '⛶ 滿版視野'; 
+            floatingFitBtn.style.color = ''; floatingFitBtn.style.background = ''; 
+            floatingFitBtn.textContent = '⛶ 最佳視角'; 
+            mainLayout.style.transform = '';
+        }
+    }
+
+    toggleFitBtn.addEventListener('click', toggleFitMode);
+    floatingFitBtn.addEventListener('click', toggleFitMode);
+    window.addEventListener('resize', () => { if (isFitMode) updateScale(); });
+
+    // 重新連結：綁定大靈珠點擊開啟法相事件
+    document.getElementById('bigCapsule').addEventListener('click', openBigCapsule);
+
+    // 彈窗關閉
+    document.getElementById('popupClose').addEventListener('click', () => {
+        document.getElementById('prizePopup').classList.remove('show');
+        document.getElementById('handle').classList.add('standby');
+    });
+
+    // 綁定分享按鈕事件
+    document.getElementById('shareLineBtn').addEventListener('click', shareToLine);
+    document.getElementById('shareFbBtn').addEventListener('click', shareToFacebook);
+    document.getElementById('shareXBtn').addEventListener('click', shareToX);
+    document.getElementById('shareCopyBtn').addEventListener('click', copyShareLink);
+
+};
+</script>
+</body>
+</html>
