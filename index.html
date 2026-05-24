@@ -522,7 +522,7 @@
             border: 1px solid rgba(255,215,0,0.5); border-radius: 20px; padding: 40px 60px;
             text-align: center; box-shadow: 0 0 80px rgba(255, 215, 0, 0.2), inset 0 0 30px rgba(255,255,255,0.05);
             transform: scale(0.8) translateY(50px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            max-width: 450px; position: relative; overflow: hidden;
+            max-width: 750px; position: relative; overflow: hidden;
         }
         .prize-popup-box::before { 
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -587,38 +587,63 @@
         
         .confetti { position: fixed; z-index: 1001; pointer-events: none; }
 
-        /* ===== 分享區樣式 ===== */
-        .share-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,215,0,0.2);
+        /* ===== 並排容器 ===== */
+        .popup-main-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
             position: relative;
             z-index: 2;
+        }
+        .popup-card-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== 分享區樣式 ===== */
+        .share-section {
+            padding: 25px;
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 16px;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            min-width: 200px;
         }
         .share-label {
             font-size: 0.85rem;
             color: var(--text-muted);
             letter-spacing: 3px;
             margin-bottom: 15px;
+            text-align: center;
+        }
+        .share-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
         }
         .qrcode-container {
             background: #fff;
             padding: 12px;
             border-radius: 12px;
             display: inline-block;
-            margin-bottom: 15px;
             box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            flex-shrink: 0;
         }
         .qrcode-container canvas, .qrcode-container img {
             display: block;
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
         }
         .share-buttons {
             display: flex;
-            gap: 10px;
-            justify-content: center;
+            gap: 8px;
             flex-wrap: wrap;
+            flex-direction: column;
         }
         .share-btn {
             padding: 10px 18px;
@@ -632,6 +657,7 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
         }
         .share-btn:hover {
@@ -646,6 +672,73 @@
         .share-btn.x:hover { background: #fff; color: #000; }
         .share-btn.copy { border-color: #ffd700; color: #ffd700; }
         .share-btn.copy:hover { background: #ffd700; color: #000; }
+
+        /* 寬螢幕：分享區變寬 */
+        @media (min-width: 800px) {
+            .share-section {
+                min-width: 320px;
+            }
+            .share-content {
+                flex-direction: row;
+                align-items: center;
+                gap: 20px;
+            }
+            .share-buttons {
+                flex-direction: column;
+                gap: 8px;
+                min-width: 140px;
+            }
+            .share-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* RWD: 窄螢幕改為上下排列 */
+        @media (max-width: 800px) {
+            .popup-main-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .share-section {
+                width: 100%;
+                padding: 15px;
+            }
+            .share-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .share-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* RWD: 更小螢幕優化 */
+        @media (max-width: 500px) {
+            .prize-popup-box {
+                padding: 20px 15px;
+                max-height: 90vh;
+                overflow-y: auto;
+                max-width: 95vw;
+            }
+            .popup-label { font-size: 0.8rem; margin-bottom: 12px; letter-spacing: 2px; }
+            .popup-prize-image-container {
+                width: 140px;
+                height: 250px;
+                margin-bottom: 10px;
+            }
+            .popup-prize-icon { font-size: 3rem; margin-bottom: 10px; }
+            .popup-prize-name { font-size: 1.3rem; margin-bottom: 10px; letter-spacing: 2px; }
+            .share-section { padding: 12px; }
+            .share-label { margin-bottom: 8px; font-size: 0.7rem; }
+            .share-content { gap: 10px; }
+            .qrcode-container { padding: 8px; }
+            .qrcode-container canvas, .qrcode-container img { width: 90px; height: 90px; }
+            .share-buttons { gap: 5px; flex-wrap: wrap; }
+            .share-btn { padding: 6px 10px; font-size: 0.7rem; border-radius: 18px; }
+            .popup-close-btn { padding: 10px 25px; font-size: 0.85rem; letter-spacing: 2px; margin-top: 10px; }
+        }
 
         @media (max-width: 1100px) {
             .main-layout { flex-direction: column; align-items: center; }
@@ -756,34 +849,42 @@
     <div class="prize-popup-box">
         <div class="popup-content">
             <div class="popup-label">✦ 心頻共振 ✦ 誠心感召 ✦</div>
-            
+
             <div class="mandala-aura"></div>
 
-            <div class="popup-prize-image-container" id="popupImgContainer">
-                <img id="popupImage" class="popup-prize-image" src="" alt="觀音法相" />
-            </div>
-            <div class="popup-prize-icon" id="popupIcon">🪷</div>
-            
-            <div class="popup-prize-name" id="popupPrize"></div>
-            <!-- 分享區塊 -->
-            <div class="share-section">
-                <div class="share-label">✦ 分享祝福 ✦</div>
-                <div class="qrcode-container">
-                    <img id="qrcodeImg" src="" alt="分享 QR Code" />
+            <!-- 卡片與分享並排容器 -->
+            <div class="popup-main-row">
+                <!-- 左側：卡片區 -->
+                <div class="popup-card-area">
+                    <div class="popup-prize-image-container" id="popupImgContainer">
+                        <img id="popupImage" class="popup-prize-image" src="" alt="觀音法相" />
+                    </div>
+                    <div class="popup-prize-icon" id="popupIcon">🪷</div>
+                    <div class="popup-prize-name" id="popupPrize"></div>
                 </div>
-                <div class="share-buttons">
-                    <button class="share-btn line" id="shareLineBtn">
-                        <span>LINE</span>
-                    </button>
-                    <button class="share-btn fb" id="shareFbBtn">
-                        <span>Facebook</span>
-                    </button>
-                    <button class="share-btn x" id="shareXBtn">
-                        <span>𝕏</span>
-                    </button>
-                    <button class="share-btn copy" id="shareCopyBtn">
-                        <span>📋 複製連結</span>
-                    </button>
+
+                <!-- 右側：分享區塊 -->
+                <div class="share-section">
+                    <div class="share-label">✦ 分享祝福 ✦</div>
+                    <div class="share-content">
+                        <div class="qrcode-container">
+                            <img id="qrcodeImg" src="" alt="分享 QR Code" />
+                        </div>
+                        <div class="share-buttons">
+                            <button class="share-btn line" id="shareLineBtn">
+                                <span>LINE</span>
+                            </button>
+                            <button class="share-btn fb" id="shareFbBtn">
+                                <span>Facebook</span>
+                            </button>
+                            <button class="share-btn x" id="shareXBtn">
+                                <span>𝕏</span>
+                            </button>
+                            <button class="share-btn copy" id="shareCopyBtn">
+                                <span>📋 複製連結</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
