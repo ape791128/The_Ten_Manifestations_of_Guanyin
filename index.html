@@ -1097,7 +1097,7 @@ function initMachine() {
 // 接收一個選填參數 forcedPrize，若有值則直接指定結果
 function spinGashapon(forcedPrize = null) {
     if(isSpinning || items.length === 0) return;
-    
+
     if (navigator.vibrate) navigator.vibrate(50);
 
     isSpinning = true;
@@ -1105,9 +1105,9 @@ function spinGashapon(forcedPrize = null) {
     const container = document.getElementById('capsuleContainer');
     const cabinet = document.getElementById('gameCabinet');
     const status = document.getElementById('machineStatus');
-    
+
     status.textContent = "匯聚星能...";
-    handle.classList.remove('standby'); 
+    handle.classList.remove('standby');
     handle.classList.add('rotating-handle');
     container.classList.add('shaking');
     cabinet.classList.add('charging'); 
@@ -1357,6 +1357,12 @@ function renderItemAccordion() {
 }
 
 window.onload = function() {
+    // 強制頁面載入時定位到最上方
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
     generateStars();
     initParallax();
 
@@ -1385,12 +1391,18 @@ window.onload = function() {
             alert('請先定位祈福法相。');
             return;
         }
+        // 滾動到轉珠機位置
+        document.getElementById('gameCabinet').scrollIntoView({ behavior: 'smooth', block: 'center' });
         const prize = items.find(i => i.name === val);
-        spinGashapon(prize); // 傳入指定的 prize
+        spinGashapon(prize);
     });
 
     // 綁定「隨機宇宙共振」與機台手把 (隨機抽籤)
-    document.getElementById('btnRandom').addEventListener('click', () => spinGashapon(null));
+    document.getElementById('btnRandom').addEventListener('click', () => {
+        // 滾動到轉珠機位置
+        document.getElementById('gameCabinet').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        spinGashapon(null);
+    });
     document.getElementById('handle').addEventListener('click', () => spinGashapon(null));
 
     // 音效控制
