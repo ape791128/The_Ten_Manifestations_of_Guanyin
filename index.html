@@ -482,11 +482,17 @@
 
         .rotating-handle { animation: rotateHandle 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes rotateHandle { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
-        .shaking .capsule { animation: energySwirl 0.8s cubic-bezier(0.2, 0, 0.8, 1) infinite; }
-        @keyframes energySwirl {
-            0% { transform: rotate(0deg) translateX(8px) rotate(0deg) scale(1); filter: brightness(1); }
-            50% { filter: brightness(1.5); transform: rotate(180deg) translateX(12px) rotate(-180deg) scale(1.1); }
-            100% { transform: rotate(360deg) translateX(8px) rotate(-360deg) scale(1); filter: brightness(1); }
+        .shaking .capsule {
+            animation: capsuleBounce var(--jump-speed, 0.06s) steps(1) infinite;
+        }
+        @keyframes capsuleBounce {
+            0% { transform: translate(var(--jx1), var(--jy1)); }
+            14% { transform: translate(var(--jx2), var(--jy2)); }
+            28% { transform: translate(var(--jx3), var(--jy3)); }
+            42% { transform: translate(var(--jx4), var(--jy4)); }
+            56% { transform: translate(var(--jx5), var(--jy5)); }
+            70% { transform: translate(var(--jx6), var(--jy6)); }
+            84% { transform: translate(var(--jx7), var(--jy7)); }
         }
 
         .dropped-capsule {
@@ -1058,24 +1064,32 @@ const divineColors = [
 function initMachine() {
     const container = document.getElementById('capsuleContainer');
     container.innerHTML = '';
-    
-    for(let i=0; i<20; i++) { 
+
+    for(let i=0; i<20; i++) {
         const cap = document.createElement('div');
         cap.className = 'capsule';
         const color = divineColors[Math.floor(Math.random() * divineColors.length)];
         cap.style.setProperty('--c1', color[0]);
         cap.style.setProperty('--c2', color[1]);
-        
-        const r = 110 * Math.sqrt(Math.random()); 
+
+        const r = 110 * Math.sqrt(Math.random());
         const theta = Math.random() * 2 * Math.PI;
-        const x = 50 + r * Math.cos(theta) / 2.5; 
-        const y = 50 + r * Math.sin(theta) / 2.5; 
-        
+        const x = 50 + r * Math.cos(theta) / 2.5;
+        const y = 50 + r * Math.sin(theta) / 2.5;
+
         cap.style.left = `calc(${x}% - 24px)`;
         cap.style.top = `calc(${y}% - 24px)`;
         cap.style.setProperty('--r', Math.random()*360 + 'deg');
         cap.style.zIndex = Math.floor(y);
-        
+
+        // 撞壁亂彈參數
+        const randJump = () => (Math.random() - 0.5) * 70 + 'px';
+        for (let j = 1; j <= 7; j++) {
+            cap.style.setProperty('--jx' + j, randJump());
+            cap.style.setProperty('--jy' + j, randJump());
+        }
+        cap.style.setProperty('--jump-speed', (0.35 + Math.random() * 0.2) + 's');
+
         container.appendChild(cap);
     }
 }
