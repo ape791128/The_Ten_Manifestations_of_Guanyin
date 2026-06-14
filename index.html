@@ -1464,6 +1464,14 @@ window.onload = function() {
     document.getElementById('popupClose').addEventListener('click', () => {
         document.getElementById('prizePopup').classList.remove('show');
         document.getElementById('handle').classList.add('standby');
+
+        // 自動定位到下一個觀音
+        if (currentPrize) {
+            const currentIndex = items.findIndex(i => i.name === currentPrize.name);
+            const nextIndex = (currentIndex + 1) % items.length; // 循環到第一個
+            document.getElementById('manualSelect').value = items[nextIndex].name;
+        }
+
         // 回到畫面最上方
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     });
