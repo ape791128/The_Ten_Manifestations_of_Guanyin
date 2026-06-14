@@ -71,7 +71,7 @@
         }
 
         /* ===== FLOATING BUTTONS ===== */
-        .floating-fit-btn, .audio-toggle-btn {
+        .floating-fit-btn, .audio-toggle-btn, .share-blessing-btn {
             position: fixed;
             top: 25px;
             z-index: 1000;
@@ -91,7 +91,8 @@
         }
         .floating-fit-btn { right: 25px; }
         .audio-toggle-btn { right: 180px; }
-        .floating-fit-btn:hover, .audio-toggle-btn:hover {
+        .share-blessing-btn { right: 335px; }
+        .floating-fit-btn:hover, .audio-toggle-btn:hover, .share-blessing-btn:hover {
             background: rgba(28, 31, 74, 0.8);
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(255,215,0,0.6);
@@ -593,6 +594,81 @@
         
         .confetti { position: fixed; z-index: 1001; pointer-events: none; }
 
+        /* ===== 分享祝福彈窗 ===== */
+        .blessing-popup {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.92); display: flex; align-items: center; justify-content: center;
+            z-index: 1100; opacity: 0; pointer-events: none; transition: opacity 0.4s; backdrop-filter: blur(15px);
+        }
+        .blessing-popup.show { opacity: 1; pointer-events: all; }
+        .blessing-popup-box {
+            background: linear-gradient(180deg, #1c1f4a 0%, #0a0c1a 100%);
+            border: 1px solid rgba(255,215,0,0.4); border-radius: 20px; padding: 30px;
+            max-width: 900px; width: 95%; max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.2);
+            transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .blessing-popup.show .blessing-popup-box { transform: scale(1); }
+        .blessing-popup-header {
+            text-align: center; margin-bottom: 25px; padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+        }
+        .blessing-popup-title {
+            font-size: 1.6rem; color: var(--divine-gold); font-weight: 900;
+            letter-spacing: 6px; text-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        .blessing-popup-subtitle {
+            font-size: 0.9rem; color: var(--text-muted); margin-top: 8px; letter-spacing: 2px;
+        }
+        .blessing-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .blessing-card {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px;
+            transition: all 0.3s;
+        }
+        .blessing-card:hover {
+            border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.05);
+            transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .blessing-card-img {
+            width: 80px; height: 140px; border-radius: 8px; overflow: hidden;
+            border: 2px solid var(--divine-gold); flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+        .blessing-card-img img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .blessing-card-info { flex: 1; min-width: 0; }
+        .blessing-card-name {
+            font-size: 1rem; font-weight: 700; color: var(--divine-gold);
+            letter-spacing: 2px; margin-bottom: 8px;
+        }
+        .blessing-card-qr {
+            background: #fff; padding: 6px; border-radius: 6px; display: inline-block;
+        }
+        .blessing-card-qr img { width: 70px; height: 70px; display: block; }
+        .blessing-popup-close {
+            display: block; margin: 25px auto 0; padding: 12px 40px;
+            background: transparent; color: var(--divine-gold); border: 1px solid var(--divine-gold);
+            border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer;
+            font-family: inherit; letter-spacing: 3px; transition: all 0.3s;
+        }
+        .blessing-popup-close:hover {
+            background: var(--divine-gold); color: #000;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        @media (max-width: 600px) {
+            .blessing-popup-box { padding: 20px 15px; }
+            .blessing-grid { grid-template-columns: 1fr; }
+            .blessing-card { padding: 12px; gap: 12px; }
+            .blessing-card-img { width: 60px; height: 105px; }
+            .blessing-card-qr img { width: 55px; height: 55px; }
+        }
+
         /* ===== 並排容器 ===== */
         .popup-main-row {
             display: flex;
@@ -755,12 +831,13 @@
             .game-cabinet { padding: 25px 15px; width: 100%; border-radius: 30px; }
             .prize-popup-box { padding: 30px 20px; }
             .left-panel { max-width: 100%; padding: 25px 20px; border-radius: 16px; }
-            .floating-fit-btn, .audio-toggle-btn {
+            .floating-fit-btn, .audio-toggle-btn, .share-blessing-btn {
                 padding: 8px 12px; font-size: 0.85rem; top: 12px; letter-spacing: 1px;
                 min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
             }
             .floating-fit-btn { right: 8px; }
             .audio-toggle-btn { right: 105px; }
+            .share-blessing-btn { right: 8px; top: 65px; }
         }
     </style>
 </head>
@@ -771,6 +848,7 @@
 
 <button id="floatingFitBtn" class="floating-fit-btn">⛶ 最佳視角</button>
 <button id="audioToggleBtn" class="audio-toggle-btn">🔊 音效開啟</button>
+<button id="shareBlessingBtn" class="share-blessing-btn">🙏 分享祝福</button>
 
 <div class="main-layout">
     <!-- LEFT PANEL (重塑為宇宙共振樞紐風格) -->
@@ -896,6 +974,20 @@
 
             <button class="popup-close-btn" id="popupClose">雙 手 合 十</button>
         </div>
+    </div>
+</div>
+
+<!-- 分享祝福彈窗 -->
+<div class="blessing-popup" id="blessingPopup">
+    <div class="blessing-popup-box">
+        <div class="blessing-popup-header">
+            <div class="blessing-popup-title">✦ 十三尊觀音祝福 ✦</div>
+            <div class="blessing-popup-subtitle">掃描 QR Code 分享法相祝福</div>
+        </div>
+        <div class="blessing-grid" id="blessingGrid">
+            <!-- JavaScript 動態生成 -->
+        </div>
+        <button class="blessing-popup-close" id="blessingPopupClose">雙 手 合 十</button>
     </div>
 </div>
 
@@ -1481,6 +1573,69 @@ window.onload = function() {
     document.getElementById('shareFbBtn').addEventListener('click', shareToFacebook);
     document.getElementById('shareXBtn').addEventListener('click', shareToX);
     document.getElementById('shareCopyBtn').addEventListener('click', copyShareLink);
+
+    // ===== 分享祝福彈窗功能 =====
+    function renderBlessingGrid() {
+        const grid = document.getElementById('blessingGrid');
+        const baseUrl = window.location.href.split('?')[0];
+
+        // 清空現有內容
+        grid.innerHTML = '';
+
+        items.forEach(item => {
+            const shareUrl = `${baseUrl}?blessing=${encodeURIComponent(item.name)}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(shareUrl)}`;
+
+            const card = document.createElement('div');
+            card.className = 'blessing-card';
+
+            // 圖片容器
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'blessing-card-img';
+
+            if (item.img) {
+                const img = document.createElement('img');
+                img.src = item.img;
+                img.alt = item.name;
+                img.onerror = function() {
+                    imgContainer.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.5rem;">${item.icon}</div>`;
+                };
+                imgContainer.appendChild(img);
+            } else {
+                imgContainer.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.5rem;">${item.icon}</div>`;
+            }
+
+            // 資訊區
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'blessing-card-info';
+            infoDiv.innerHTML = `
+                <div class="blessing-card-name">${item.icon} ${item.name}</div>
+                <div class="blessing-card-qr">
+                    <img src="${qrUrl}" alt="QR Code" />
+                </div>
+            `;
+
+            card.appendChild(imgContainer);
+            card.appendChild(infoDiv);
+            grid.appendChild(card);
+        });
+    }
+
+    document.getElementById('shareBlessingBtn').addEventListener('click', () => {
+        renderBlessingGrid();
+        document.getElementById('blessingPopup').classList.add('show');
+    });
+
+    document.getElementById('blessingPopupClose').addEventListener('click', () => {
+        document.getElementById('blessingPopup').classList.remove('show');
+    });
+
+    // 點擊背景關閉彈窗
+    document.getElementById('blessingPopup').addEventListener('click', (e) => {
+        if (e.target.id === 'blessingPopup') {
+            document.getElementById('blessingPopup').classList.remove('show');
+        }
+    });
 
 };
 </script>
